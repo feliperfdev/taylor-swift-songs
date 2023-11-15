@@ -30,15 +30,44 @@ class _SongPageState extends State<SongPage> {
       body: ValueListenableBuilder(
           valueListenable: notifier,
           builder: (context, videos, _) {
+            if (videos.isEmpty) {
+              return const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  SizedBox(height: 20),
+                  Center(
+                    child: Text('Loading songs...'),
+                  ),
+                ],
+              );
+            }
+
             return SingleChildScrollView(
               child: Column(
-                children: [
-                  for (final video in videos) ...{
-                    Text('${video.title}'),
-                    const SizedBox(height: 10),
-                    Image.network(video.thumbnails?.first.url ?? ''),
+                children: videos.map(
+                  (video) {
+                    return GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 16,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('${video.title}'),
+                            const SizedBox(height: 10),
+                            Image.network(video.thumbnails?.first.url ?? ''),
+                          ],
+                        ),
+                      ),
+                    );
                   },
-                ],
+                ).toList(),
               ),
             );
           }),

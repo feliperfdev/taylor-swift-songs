@@ -29,6 +29,18 @@ class _AlbumsPageState extends State<AlbumsPage> {
       body: ValueListenableBuilder(
         valueListenable: notifier,
         builder: (_, state, child) {
+          if (state is AlbumsErrorState) {
+            return Center(
+              child: Column(
+                children: [
+                  const Text('An unexpected error has ocurried!'),
+                  const SizedBox(height: 20),
+                  Text(state.message),
+                ],
+              ),
+            );
+          }
+
           if (state is AlbumsLoadingState) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -49,7 +61,7 @@ class _AlbumsPageState extends State<AlbumsPage> {
                     );
                   },
                   title: Text(album.title),
-                  subtitle: Text('${songs.length} músicas'),
+                  subtitle: Text('${songs.length} songs'),
                 );
               },
             );

@@ -10,7 +10,7 @@ class FetchAlbumsNotifier extends ValueNotifier<AlbumsState> {
   Future<void> fetch() async {
     value = AlbumsLoadingState();
     value = (await Modular.get<FetchAlbumsWithSongs>().call()).fold(
-      (exception) => AlbumsErrorState('message'),
+      (exception) => AlbumsErrorState(exception.toString()),
       AlbumsSuccessState.new,
     );
   }
