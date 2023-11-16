@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:taylor_swift_songs_for_fun/app/utils/widgets/back_button_appbar_widget.dart';
+import 'package:taylor_swift_songs_for_fun/app/utils/widgets/shimmering/video_card_shimmering_widget.dart';
 import '../../domain/models/song.dart';
 import '../controllers/fetch_song_video/fetch_song_video_notifier.dart';
 
@@ -26,22 +28,25 @@ class _SongPageState extends State<SongPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(widget.song.title),
+        leading: const BackButtonAppBarWidget(),
+      ),
       body: ValueListenableBuilder(
           valueListenable: notifier,
           builder: (context, videos, _) {
             if (videos.isEmpty) {
-              return const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(
-                    child: CircularProgressIndicator(),
+              return SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                child: Column(
+                  children: List.generate(
+                    10,
+                    (_) => const VideoCardShimmeringWidget(),
                   ),
-                  SizedBox(height: 20),
-                  Center(
-                    child: Text('Loading songs...'),
-                  ),
-                ],
+                ),
               );
             }
 
@@ -59,9 +64,25 @@ class _SongPageState extends State<SongPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('${video.title}'),
+                            Text(
+                              '${video.title}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
+                            ),
                             const SizedBox(height: 10),
-                            Image.network(video.thumbnails?.first.url ?? ''),
+                            Image.network(
+                              video.thumbnails?.first.url ?? '',
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                return (loadingProgress != null)
+                                    ? const Center(
+                                        child: CircularProgressIndicator())
+                                    : child;
+                              },
+                            ),
+                            const Divider(),
                           ],
                         ),
                       ),

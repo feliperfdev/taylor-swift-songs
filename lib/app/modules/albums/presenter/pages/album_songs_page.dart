@@ -1,27 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:taylor_swift_songs_for_fun/app/utils/app_routes.dart';
+import 'package:taylor_swift_songs_for_fun/app/utils/widgets/back_button_appbar_widget.dart';
 
-import '../../domain/models/song.dart';
+import '../../domain/models/params/album_songs_params.dart';
 
 class AlbumSongsPage extends StatelessWidget {
-  final List<Song> songs;
+  final AlbumSongsParams params;
   const AlbumSongsPage({
     super.key,
-    required this.songs,
+    required this.params,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(params.albumName),
+        leading: const BackButtonAppBarWidget(),
+      ),
       body: ListView.builder(
-        itemCount: songs.length,
+        itemCount: params.songs.length,
         itemBuilder: (context, index) {
-          final song = songs[index];
+          final song = params.songs[index];
           return ListTile(
             onTap: () async {
               await Modular.to.pushNamed(
-                '/songPage/',
+                AppRoutes.songPage,
                 arguments: song,
               );
             },

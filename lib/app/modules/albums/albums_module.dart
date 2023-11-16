@@ -38,7 +38,7 @@ class AlbumsModule extends Module {
       ChildRoute(
         '/albumSongsPage/',
         child: (_) => AlbumSongsPage(
-          songs: r.args.data,
+          params: r.args.data,
         ),
       ),
     );

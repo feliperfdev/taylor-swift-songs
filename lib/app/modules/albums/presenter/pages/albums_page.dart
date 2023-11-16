@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:taylor_swift_songs_for_fun/app/modules/albums/presenter/controllers/fetch_albums/fetch_albums_notifier.dart';
+import 'package:taylor_swift_songs_for_fun/app/utils/app_routes.dart';
 
+import '../../domain/models/params/album_songs_params.dart';
 import '../controllers/fetch_albums/albums_state.dart';
 
 class AlbumsPage extends StatefulWidget {
@@ -24,7 +26,30 @@ class _AlbumsPageState extends State<AlbumsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
+        title: const Text(
+          'Albums and Songs',
+          style: TextStyle(
+            fontSize: 16.5,
+          ),
+        ),
+        leading: IconButton(
+          tooltip: 'Search for an album or song',
+          onPressed: () {},
+          icon: const Icon(
+            Icons.search,
+            color: Colors.white,
+          ),
+        ),
+        actions: [
+          IconButton(
+            tooltip: 'Info',
+            onPressed: () {},
+            icon: const Icon(
+              Icons.info_outline,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
       body: ValueListenableBuilder(
         valueListenable: notifier,
@@ -56,8 +81,11 @@ class _AlbumsPageState extends State<AlbumsPage> {
                 return ListTile(
                   onTap: () async {
                     await Modular.to.pushNamed(
-                      '/albumSongsPage/',
-                      arguments: songs,
+                      AppRoutes.albumSongsPage,
+                      arguments: AlbumSongsParams(
+                        songs: songs,
+                        albumName: album.title,
+                      ),
                     );
                   },
                   title: Text(album.title),
